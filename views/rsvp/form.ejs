@@ -1,0 +1,22 @@
+<% include partials/layout.ejs %>
+<% title = `RSVP for ${event.title}` %>
+
+<div class="card">
+    <div class="card-header">
+        RSVP for <%= event.title %>
+    </div>
+    <div class="card-body">
+        <form action="/rsvp" method="post">
+            <div class="form-group">
+                <label for="response">Your Response:</label>
+                <select name="response" class="form-control" id="response">
+                    <option value="attending">Attending</option>
+                    <option value="maybe">Maybe</option>
+                    <option value="declined">Not Attending</option>
+                </select>
+            </div>
+            <input type="hidden" name="eventId" value="<%= event._id %>">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

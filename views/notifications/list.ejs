@@ -1,0 +1,19 @@
+<% include partials/layout.ejs %>
+<% title = 'Your Notifications' %>
+
+<div class="card">
+    <div class="card-header">
+        Notifications
+    </div>
+    <ul class="list-group list-group-flush">
+        <% notifications.forEach(notification => { %>
+            <li class="list-group-item">
+                <p><%= notification.content %></p>
+                <p>Date: <%= notification.createdAt.toDateString() %></p>
+                <% if (!notification.read) { %>
+                    <span class="badge badge-warning">New!</span>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+</div>

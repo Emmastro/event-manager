@@ -1,0 +1,8 @@
+<% include partials/layout.ejs %>
+<% title = 'User Dashboard' %>
+
+<div class="jumbotron">
+    <h1>Welcome, <%= user.name %>!</h1>
+    <p><a href="/events/create" class="btn btn-primary">Create a new event</a></p>
+    <p><a href="/notifications" class="btn btn-secondary">View Notifications</a></p>
+</div>
