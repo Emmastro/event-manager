@@ -28,6 +28,19 @@ const eventSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    location: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    visibility: {
+        type: String,
+        enum: ['public', 'private'],
+        required: true
+    }
 });
 
 const Event = mongoose.model('Event', eventSchema);

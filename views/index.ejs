@@ -1,0 +1,16 @@
+<header class="jumbotron text-center" style="background-image: url('images/banner.webp'); background-size: cover;">
+    <div class="overlay" style="background-color: rgba(193, 191, 191, 0.5); padding: 50px;">
+        <h1 class="animated fadeInDown">Welcome to the University Alumni Platform!</h1>
+        <p class="animated fadeInUp">Connect, collaborate and relive memories with fellow alumni. Join us in various events organized by the community.</p>
+        <a href="#" class="btn btn-info overlay animated fadeIn">Log In</a>
+    </div>
+</header>
+
+<section class="container my-5">
+    <h2 class="animated fadeInLeft">Upcoming Events</h2>
+    <div class="row">
+        <% events.forEach(event => { %>
+            <%- include('partials/event-card', { event: event }) %>
+        <% }); %>
+    </div>
+</section>

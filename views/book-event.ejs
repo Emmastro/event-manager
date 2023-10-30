@@ -1,0 +1,45 @@
+<div class="booking-container">
+    <h2 class="mb-4">Book an Event</h2>
+    <form action="/book" method="post">
+        <div class="mb-3">
+            <label for="eventName" class="form-label">Event Name</label>
+            <input type="text" class="form-control" id="eventName" name="eventName" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="eventDate" class="form-label">Event Date</label>
+            <input type="date" class="form-control" id="eventDate" name="eventDate" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="eventTime" class="form-label">Event Time</label>
+            <input type="time" class="form-control" id="eventTime" name="eventTime" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="eventDescription" class="form-label">Event Description</label>
+            <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="eventSeats" class="form-label">Number of Seats</label>
+            <input type="number" class="form-control" id="eventSeats" name="eventSeats" required>
+            <div id="seatTooltip" data-bs-toggle="tooltip" title="Total seats available for the event.">
+                <span class="text-muted">What's this?</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Book Event</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="/path-to-bootstrap-js/bootstrap.bundle.js"></script>
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
