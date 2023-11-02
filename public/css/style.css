@@ -17,21 +17,18 @@
 
 footer {
     background-color: #A58B6F;
-    position: absolute !important;
-    bottom: 0;
-    width: 100%;
+    margin-top: auto; 
 }
 
 body {
     background-color: #FAF3DD; /* a faded yellow reminiscent of old paper or faded memories */
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    min-height: 100vh; */
+    min-height: 100vh;
     position: relative;
     min-height: 100vh;
     margin: 0; /* Reset default margin */
-    padding-bottom: 60px; /* Equal to the height of the footer */
-
+  
 }
 .booking-container {
     max-width: 600px;

@@ -1,20 +1,18 @@
 const User = require("../models/user");
 const path = require("path");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ejs = require("ejs");
-//load env
-require("dotenv").config();
+const JWT_SECRET = require("../config/auth");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const SALT_ROUNDS = 10;
+console.log("JWT_SECRET:", JWT_SECRET);
+
 
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    console.log("username:", username);
-
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ email: email });
 
     if (!user) {
       return res
@@ -22,25 +20,21 @@ exports.login = async (req, res) => {
         .json({ error: "Login failed! Check authentication credentials" });
     }
 
-    // Compare the provided password with the stored hash in the database.
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      // Passwords do not match
       res.status(401).send({ success: false, message: "Invalid credentials." });
       return;
     }
 
-    // Password is correct. Generate a JWT for the user.
-    const token = jwt.sign(
-      { id: user._id, username: user.username, role: user.role },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    // Save user data in session
+    req.session.user = {
+      id: user._id,
+      email: user.email,
+      role: user.role
+    };
 
-    res
-      .status(200)
-      .send({ success: true, message: "Logged in successfully.", token });
+    res.status(200).send({ success: true, message: "Logged in successfully." });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).send({ success: false, message: "Internal server error." });
@@ -48,26 +42,44 @@ exports.login = async (req, res) => {
 };
 
 exports.loginPage = async (req, res) => {
+  const isLogin = req.session.isAuthenticated;
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "login.ejs")
   );
-  res.render("partials/layout", { body: content });
+  res.render("partials/layout", { body: content, isLogin });
 };
 
 exports.register = async (req, res) => {
   try {
-    console.log("request body: ", req.body)
+
+    const hashedPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
+    req.body.password = hashedPassword;
+
     const user = new User(req.body);
-    console.log(user);
+
     await user.save();
-    // TODO: login user after registration
-    res.redirect("/events");
+
+    req.session.user = {
+      id: user._id,
+      email: user.email,
+      role: user.role
+    };
+
+    req.session.isAuthenticated = true;
+    res.redirect('/events'); 
+
   } catch (err) {
-    res.status(500).send(err.message);
+    if (err.name === "ValidationError") {
+      return res.status(400).send(err.message);
+    }
+
+    console.error("Registration error:", err);
+    res.status(500).send("An error occurred during registration.");
   }
 };
 
 exports.registerPage = async (req, res) => {
+  const isLogin = req.session.isAuthenticated;
   const years = [
     { value: 2023, label: "2023" },
     { value: 2022, label: "2022" },
@@ -78,18 +90,9 @@ exports.registerPage = async (req, res) => {
     { years }
   );
 
-  res.render("partials/layout", { body: content });
-};  
-
-exports.createUser = async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json({ user });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  res.render("partials/layout", { body: content, isLogin });
 };
+
 
 exports.getUser = async (req, res) => {
   try {
@@ -114,7 +117,6 @@ exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      username,
       password,
       role,
       firstName,
@@ -129,7 +131,6 @@ exports.updateUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       {
-        username,
         password,
         role,
         firstName,
@@ -162,27 +163,18 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.logout = async (req, res) => {
-  try {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token != req.token;
-    });
-    await req.user.save();
-    res.send("Logout successful");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+exports.logout = (req, res) => {
+  // Destroy the session and redirect to homepage or login page
+  req.session.destroy((err) => {
+      if (err) {
+          console.error("Error during logout:", err);
+          res.status(500).send({ success: false, message: "Internal server error during logout." });
+          return;
+      }
+      res.redirect('/');  // redirect to homepage or login page after logout
+  });
 };
 
-exports.logoutAll = async (req, res) => {
-  try {
-    req.user.tokens.splice(0, req.user.tokens.length);
-    await req.user.save();
-    res.send("Logout successful");
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
 exports.getProfile = async (req, res) => {
   res.send(req.user);

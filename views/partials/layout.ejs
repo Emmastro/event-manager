@@ -12,19 +12,70 @@
 
 <body>
 
-    <%- include('menu') %>
+    <%- include('menu', {isLogin}) %>
 
     <%- body %>
 
-    <footer class="navbar text-white text-center py-3">
-        <p>&copy; 2023 University Alumni Platform. All rights reserved.</p>
-    </footer>
+    <footer class="navbar text-white py-4">
+    <div class="container">
+        <!-- Top section: Social media links -->
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <a href="#" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Middle section: Quick links, perhaps -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/events" class="text-white">Upcoming Events</a></li>
+                    <li><a href="/about" class="text-white">About Us</a></li>
+                    <li><a href="/contact" class="text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Resources</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Alumni Stories</a></li>
+                    <li><a href="#" class="text-white">Career Support</a></li>
+                    <li><a href="#" class="text-white">Partnership Opportunities</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Stay Updated</h5>
+                <p>Subscribe to our monthly newsletter!</p>
+                <form action="/subscribe" method="post">
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-light" type="submit">Subscribe</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bottom section: Copyright -->
+        <div class="row">
+            <div class="col-md-12">
+                <p>&copy; 2023 University Alumni Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

@@ -21,10 +21,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    middleName: {
-        type: String,
-        required: false
-    },
     lastName: {
         type: String,
         required: true

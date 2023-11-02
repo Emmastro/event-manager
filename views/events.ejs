@@ -1,0 +1,13 @@
+<section class="about-us-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Events</h2>
+    </div>
+</section>
+
+<section class="container my-5">
+    <h2 class="animated fadeInLeft">Upcoming Events</h2>
+    <div class="row">
+        <% events.forEach(event => { %> <%- include('partials/event-card', { event:
+        event }) %> <% }); %>
+    </div>
+</section>

@@ -1,16 +1,176 @@
-<header class="jumbotron text-center" style="background-image: url('images/banner.webp'); background-size: cover;">
-    <div class="overlay" style="background-color: rgba(193, 191, 191, 0.5); padding: 50px;">
-        <h1 class="animated fadeInDown">Welcome to the University Alumni Platform!</h1>
-        <p class="animated fadeInUp">Connect, collaborate and relive memories with fellow alumni. Join us in various events organized by the community.</p>
-        <a href="/auth/login" class="btn btn-info overlay animated fadeIn">Log In</a>
-    </div>
+<header
+  class="jumbotron text-center"
+  style="background-image: url('images/banner.webp'); background-size: cover"
+>
+  <div
+    class="overlay"
+    style="background-color: rgba(193, 191, 191, 0.5); padding: 50px"
+  >
+    <h1 class="animated fadeInDown">
+      Welcome to the University Alumni Platform!
+    </h1>
+    <p class="animated fadeInUp">
+      Connect, collaborate and relive memories with fellow alumni. Join us in
+      various events organized by the community.
+    </p>
+    <% if (user) { %>
+    <a href="/events" class="btn btn-info overlay animated fadeIn"
+      >View Events</a
+    >
+    <% } else { %>
+    <a href="/auth/register" class="btn btn-info overlay animated fadeIn"
+      >Login</a
+    >
+    <% } %>
+  </div>
 </header>
 
 <section class="container my-5">
-    <h2 class="animated fadeInLeft">Upcoming Events</h2>
-    <div class="row">
-        <% events.forEach(event => { %>
-            <%- include('partials/event-card', { event: event }) %>
-        <% }); %>
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <h2 class="animated fadeIn">Join the Network</h2>
+      <p class="animated fadeIn">
+        Be part of a vibrant community that fosters growth and support.
+        Reconnect with classmates, expand your professional network, and
+        discover new opportunities.
+      </p>
+      <a href="/auth/register" class="btn btn-primary animated fadeIn"
+        >Get Started</a
+      >
     </div>
+    <div class="col-md-6">
+      <img src="images/about.png" alt="Alumni Network" class="img-fluid" />
+    </div>
+  </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="animated fadeInLeft">Upcoming Events</h2>
+  <div class="row">
+    <% events.forEach(event => { %> <%- include('partials/event-card', { event:
+    event }) %> <% }); %>
+  </div>
+</section>
+
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center animated fadeIn">What Our Alumni Say</h2>
+    <p class="text-center mb-4 animated fadeIn">
+      Hear from our distinguished alumni about how the network has supported
+      their growth and success.
+    </p>
+    <div class="row">
+      <!-- Testimonial 1 -->
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+          <img
+            src="images/portrait2.png"
+            alt="John Smith"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>
+                "The alumni network opened doors for me across the globe. The
+                mentorship program, in particular, was a game-changer,
+                connecting me with industry leaders and igniting my career
+                trajectory."
+              </p>
+              <footer class="blockquote-footer">
+                John Smith,
+                <cite title="Tech Innovator">Tech Innovator, SmithTech</cite>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 2 -->
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+          <img
+            src="images/portrait1.png"
+            alt="Emily Johnson"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>
+                "As an alumna working in non-profit, the network's support was
+                instrumental in funding and launching community initiatives that
+                have now touched thousands of lives."
+              </p>
+              <footer class="blockquote-footer">
+                Emily Johnson,
+                <cite title="Community Leader"
+                  >Community Leader, Hope Foundation</cite
+                >
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+      <!-- Testimonial 3 -->
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+          <img
+            src="images/portrait2.png"
+            alt="David Lee"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>
+                "Reconnecting with my university friends and sharing our
+                experiences was both nostalgic and inspiring. This network is
+                not just about professional connections; it's about lifelong
+                friendships."
+              </p>
+              <footer class="blockquote-footer">
+                David Lee,
+                <cite title="Entrepreneur">Entrepreneur, Lee & Co.</cite>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="text-center animated fadeIn">Alumni Benefits</h2>
+  <p class="text-center animated fadeInUp mb-4">
+    Discover the array of benefits exclusive to our alumni community.
+  </p>
+  <div class="row text-center">
+    <div class="col-md-4 mb-3">
+      <div class="card card-body h-100">
+        <h3 class="card-title">Professional Development</h3>
+        <p class="card-text">
+          Attend workshops and seminars to sharpen your skills and advance your
+          career.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card card-body h-100">
+        <h3 class="card-title">Networking Opportunities</h3>
+        <p class="card-text">
+          Connect with a vast network of professionals and industry leaders
+          during alumni meet-ups.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card card-body h-100">
+        <h3 class="card-title">Exclusive Discounts</h3>
+        <p class="card-text">
+          Enjoy discounts on campus facilities, events, and partner
+          organizations.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>

@@ -1,12 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const SESSION_SECRET = require('./config/auth');
 
 const app = express();
-connectDB();
+
+connectDB()
+
+app.use(session({
+    secret: SESSION_SECRET,  // Choose a strong secret key
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({ mongoUrl: process.env.MONGODB_URI}),
+    cookie: { maxAge: 3600000 }  // 1 hour
+}));
 
 app.set('view engine', 'ejs');
-
 
 app.use(express.static('public'));
 
