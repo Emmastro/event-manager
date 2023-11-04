@@ -5,12 +5,10 @@ const upload = multer();
 
 const UserController = require("../controllers/userController");
 
-router.get("/login", UserController.loginPage);
-
+router.get("/login", UserController.login);
 router.post("/login", UserController.login);
 
 router.get("/register", UserController.registerPage);
-
 router.post("/register", upload.none(), UserController.register);
 
 router.get("/logout", UserController.logout);

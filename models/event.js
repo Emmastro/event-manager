@@ -26,7 +26,7 @@ const eventSchema = new Schema({
     },
     createdDate: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     location: {
         type: String,
@@ -34,11 +34,12 @@ const eventSchema = new Schema({
     },
     image: {
         type: String,
-        required: true
+        required: false
     },
     visibility: {
         type: String,
         enum: ['public', 'private'],
+        default: 'public',
         required: true
     }
 });

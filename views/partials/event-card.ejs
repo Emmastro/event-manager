@@ -1,3 +1,11 @@
+<style>
+.card-body .btn-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2px;
+}
+</style>
+
 <div class="col-md-4">
     <div class="card mb-4 animated fadeInRight">
         <div class="card-body">
@@ -5,7 +13,15 @@
             <p class="card-text">Date: <%= event.date %></p>
             <p class="card-text">Location: <%= event.location %></p>
             <p class="card-text">Description: <%= event.description %></p>
-            <a href="#" class="btn btn-info">Details</a>
+            <div class="btn-group">
+                <a href="/events/<%= event._id %>" class="btn btn-info">Details</a>
+                <% if (event.isOrganizer) { %>
+                <a href="/events/<%= event._id %>/edit" class="btn btn-info">Edit</a>
+                <form class="btn-group" action="/events/<%= event._id %>/delete" method="POST">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <% } %>
+            </div>
         </div>
     </div>
 </div>

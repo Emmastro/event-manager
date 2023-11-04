@@ -26,9 +26,11 @@ app.use(bodyParser.json());
 
 const mainRoutes = require('./routes/main');
 const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/event');
 
 app.use('/', mainRoutes);
 app.use('/auth', authRoutes);
+app.use('/events', eventRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('404', { title: 'Page Not Found' });

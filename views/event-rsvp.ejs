@@ -1,0 +1,40 @@
+
+<section class="rsvp-form-section">
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+        <form action="/events/<%= event._id %>/rsvp" method="POST">
+            <h3>RSVP to Event</h3>
+            <!-- Radio buttons for RSVP response -->
+            <div class="response-options">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="response" id="attending" value="attending" 
+                <%= rsvp && rsvp.response === 'attending' ? 'checked' : '' %>>
+                <label class="form-check-label" for="attending">
+                Attending
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="response" id="maybe" value="maybe" 
+                <%= rsvp && rsvp.response === 'maybe' ? 'checked' : '' %>>
+                <label class="form-check-label" for="maybe">
+                Maybe
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="response" id="declined" value="declined" 
+                <%= rsvp && rsvp.response === 'declined' ? 'checked' : '' %>>
+                <label class="form-check-label" for="declined">
+                Declined
+                </label>
+            </div>
+            </div>
+            
+            <div class="submit-btn">
+            <button type="submit" class="btn btn-primary">Submit RSVP</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+</section>

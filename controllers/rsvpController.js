@@ -1,33 +1,53 @@
+const ejs = require('ejs');
+const path = require('path');
 const RSVP = require('../models/rsvp');
+const Event = require('../models/event');
 
-exports.createRSVP = async (req, res) => {
-    try {
-        const rsvp = new RSVP(req.body);
-        await rsvp.save();
-        res.status(201).json({ rsvp });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+exports.createOrUpdateRsvp = async (req, res) => {
 
-exports.getRSVP = async (req, res) => {
-    try {
-        const rsvp = await RSVP.findById(req.params.id).populate('userId eventId');
-        if (!rsvp) return res.status(404).json({ message: 'RSVP not found' });
-        res.json({ rsvp });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+    const eventId = req.params.id;
 
-exports.getRSVPs = async (req, res) => {
-    try {
-        const rsvps = await RSVP.find().populate('userId eventId');
-        res.json({ rsvps });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    const isAuthenticated = req.session.isAuthenticated;
+
+    if (!isAuthenticated) {
+        return res.redirect("/auth/login?next=/events/create");
     }
+    const event = await Event.findById({"_id":eventId});
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    if (req.method === "GET") {
+        const existingRsvp = await RSVP.findOne({ userId: req.session.user.id, eventId: eventId });
+
+        const content = await ejs.renderFile(
+            path.join(__dirname, "..", "views", "event-rsvp.ejs"),
+            { rsvp: existingRsvp, event }
+        );
+        return res.render("partials/layout", {
+            body: content,
+            isAuthenticated: req.session.isAuthenticated,
+        });
+    }
+
+    if (req.method === "POST") {
+        const rsvp = req.body;
+
+        const existingRsvp = await RSVP.findOne({ userId: req.session.user.id, eventId: eventId });
+
+        rsvp.userId = req.session.user.id;
+        rsvp.eventId = eventId;
+    
+        if (existingRsvp) {
+            await RSVP.findByIdAndUpdate(existingRsvp._id, rsvp);
+        } else {
+            const newRsvp = new RSVP(rsvp);
+            await newRsvp.save();
+        }
+
+        res.redirect(`/events/${eventId}`);
+    }   
 }
+
+
 
 exports.updateRSVP = async (req, res) => {
     try{

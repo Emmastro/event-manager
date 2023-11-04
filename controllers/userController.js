@@ -2,52 +2,60 @@ const User = require("../models/user");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const ejs = require("ejs");
-const JWT_SECRET = require("../config/auth");
 
 const SALT_ROUNDS = 10;
-console.log("JWT_SECRET:", JWT_SECRET);
-
 
 exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  let message = null;
 
-    const user = await User.findOne({ email: email });
-
-    if (!user) {
-      return res
-        .status(401)
-        .json({ error: "Login failed! Check authentication credentials" });
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatch) {
-      res.status(401).send({ success: false, message: "Invalid credentials." });
-      return;
-    }
-
-    // Save user data in session
-    req.session.user = {
-      id: user._id,
-      email: user.email,
-      role: user.role
-    };
-
-    res.status(200).send({ success: true, message: "Logged in successfully." });
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).send({ success: false, message: "Internal server error." });
+  const isAuthenticated = req.session.isAuthenticated;
+  if (isAuthenticated) {
+    res.redirect('/events');
+    return;
   }
+
+  if (req.method === 'POST') {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email: email });
+
+      if (!user) {
+        message = `Login failed! Check authentication credentials ${email}`;
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        message = "Invalid credentials.";
+      }
+
+      req.session.user = {
+        id: user._id,
+        email: user.email,
+        role: user.role
+      };
+
+      req.session.isAuthenticated = true;
+
+      const next = req.query.next;
+      if (next) {
+        res.redirect(next);
+        return;
+      }
+      res.redirect('/events');
+
+    } catch (error) {
+      message = `Error during login: ${error}`;
+    }
+  }
+  
+  const content = await ejs.renderFile(
+    path.join(__dirname, "..", "views", "login.ejs"), {message}
+  );
+
+  res.render("partials/layout", { body: content, isAuthenticated });
 };
 
-exports.loginPage = async (req, res) => {
-  const isLogin = req.session.isAuthenticated;
-  const content = await ejs.renderFile(
-    path.join(__dirname, "..", "views", "login.ejs")
-  );
-  res.render("partials/layout", { body: content, isLogin });
-};
 
 exports.register = async (req, res) => {
   try {
@@ -79,7 +87,7 @@ exports.register = async (req, res) => {
 };
 
 exports.registerPage = async (req, res) => {
-  const isLogin = req.session.isAuthenticated;
+  const isAuthenticated = req.session.isAuthenticated;
   const years = [
     { value: 2023, label: "2023" },
     { value: 2022, label: "2022" },
@@ -90,7 +98,7 @@ exports.registerPage = async (req, res) => {
     { years }
   );
 
-  res.render("partials/layout", { body: content, isLogin });
+  res.render("partials/layout", { body: content, isAuthenticated });
 };
 
 

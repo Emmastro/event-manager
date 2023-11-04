@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University Alumni Platform</title>
+    <title>AlumnX</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
@@ -12,7 +12,7 @@
 
 <body>
 
-    <%- include('menu', {isLogin}) %>
+    <%- include('menu', {isAuthenticated}) %>
 
     <%- body %>
 
@@ -63,7 +63,7 @@
         <!-- Bottom section: Copyright -->
         <div class="row">
             <div class="col-md-12">
-                <p>&copy; 2023 University Alumni Platform. All rights reserved.</p>
+                <p>&copy; 2023 AlumnX. All rights reserved.</p>
             </div>
         </div>
     </div>
