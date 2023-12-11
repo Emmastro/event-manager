@@ -1,0 +1,23 @@
+[
+    {
+        "userId": "628b72eaf76a5b23e4a657e1",
+        "content": "The Tech Conference 2023 schedule has been updated.",
+        "type": "eventUpdate",
+        "relatedEvent": "627c82eaf76a5b23e4a657e3",
+        "read": false
+    },
+    {
+        "userId": "628b72eaf76a5b23e4a657e2",
+        "content": "You have been invited to the Alumni Networking Event.",
+        "type": "newEvent",
+        "relatedEvent": "627c82eaf76a5b23e4a657e4",
+        "read": true
+    },
+    {
+        "userId": "628b72eaf76a5b23e4a657e3",
+        "content": "Unfortunately, the Spring Festival has been cancelled.",
+        "type": "eventCancellation",
+        "relatedEvent": "627c82eaf76a5b23e4a657e5",
+        "read": false
+    }
+]

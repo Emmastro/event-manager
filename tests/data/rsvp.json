@@ -1,0 +1,23 @@
+[
+    {
+        "_id": "62b7f0f4a8e1d14f5e5b2761",
+        "userId": "62b7e13e8d22c4a7c9b7f123",
+        "eventId": "62b7e13e8d22c4a7c9b7f456",
+        "response": "attending",
+        "respondedAt": "2023-06-25T15:20:52.000Z"
+    },
+    {
+        "_id": "62b7f1e3a8e1d14f5e5b2789",
+        "userId": "62b7e13e8d22c4a7c9b7f987",
+        "eventId": "62b7e13e8d22c4a7c9b7f654",
+        "response": "maybe",
+        "respondedAt": "2023-06-25T15:24:35.000Z"
+    },
+    {
+        "_id": "62b7f2c5a8e1d14f5e5b27b0",
+        "userId": "62b7e13e8d22c4a7c9b7f321",
+        "eventId": "62b7e13e8d22c4a7c9b7f789",
+        "response": "declined",
+        "respondedAt": "2023-06-25T15:28:05.000Z"
+    }
+]

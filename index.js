@@ -7,13 +7,15 @@ const SESSION_SECRET = require('./config/auth');
 
 const app = express();
 
-connectDB()
+
+// connectDB()
 
 app.use(session({
     secret: SESSION_SECRET,  // Choose a strong secret key
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({ mongoUrl: process.env.MONGODB_URI}),
+    // TODO: only use MongoStore when not running jest. We could have a app.js that adds the store 
+    //store: new MongoStore({ mongoUrl: process.env.MONGODB_URI}),
     cookie: { maxAge: 3600000 }  // 1 hour
 }));
 
@@ -43,8 +45,8 @@ app.use((err, req, res, next) => {
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
 
 module.exports = app; 

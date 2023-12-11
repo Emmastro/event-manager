@@ -34,15 +34,20 @@ exports.getEvents = async (req, res) => {
 };
 
 exports.createOrUpdateEvent = async (req, res) => {
+
+  console.log("createOrUpdateEvent");
   // check if user is authenticated
   if (!req.session.isAuthenticated) {
+    console.log("not authenticated");
     return res.redirect("/auth/login?next=/events/create");
   }
 
+  console.log("authenticated");
   let message = null;
   if (req.method === "POST") {
     try {
       const payload = req.body;
+      console.log("payload: ", payload);
       payload.organizerId = req.session.user.id;
 
       const event = new Event(payload);

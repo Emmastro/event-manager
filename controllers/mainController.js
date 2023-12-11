@@ -10,6 +10,8 @@ exports.homePage = async (req, res) => {
     const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
     const events = await Event.find(eventsQuery).limit(3);
 
+    //TODO: paginate view for this?
+
     const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'index.ejs'), { events, user,  });
     res.render('partials/layout', { body: content, isAuthenticated});
 }

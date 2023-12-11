@@ -1,0 +1,31 @@
+[
+    {
+      "organizerId": "627b72eaf76a5b23e4a657e6",
+      "title": "Tech Conference 2023",
+      "description": "Annual conference focusing on the latest trends in technology.",
+      "category": "professional development",
+      "date": "2023-06-15T09:00:00.000Z",
+      "location": "Convention Center, Tech City",
+      "image": "https://example.com/event-image.jpg",
+      "visibility": "public"
+    },
+    {
+      "organizerId": "627b72eaf76a5b23e4a658f7",
+      "title": "Alumni Networking Event",
+      "description": "A great opportunity for alumni to network and reconnect.",
+      "category": "networking",
+      "date": "2023-07-20T18:00:00.000Z",
+      "location": "Alumni Hall, University Campus",
+      "visibility": "private"
+    },
+    {
+      "organizerId": "627b72eaf76a5b23e4a659a2",
+      "title": "Spring Festival",
+      "description": "Celebrate the spring season with various campus activities.",
+      "category": "campus events",
+      "date": "2023-04-10T10:00:00.000Z",
+      "location": "Central Park, Campus",
+      "visibility": "public"
+    }
+  ]
+  
