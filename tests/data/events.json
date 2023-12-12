@@ -1,5 +1,6 @@
 [
     {
+      "_id": "627b72eaf76a5b23e4a65736",
       "organizerId": "627b72eaf76a5b23e4a657e6",
       "title": "Tech Conference 2023",
       "description": "Annual conference focusing on the latest trends in technology.",
@@ -10,6 +11,7 @@
       "visibility": "public"
     },
     {
+      "_id": "627b72eaf76a5b23e4a65734",
       "organizerId": "627b72eaf76a5b23e4a658f7",
       "title": "Alumni Networking Event",
       "description": "A great opportunity for alumni to network and reconnect.",
@@ -19,6 +21,7 @@
       "visibility": "private"
     },
     {
+      "_id": "627b72eaf76a5b23e4a65735",
       "organizerId": "627b72eaf76a5b23e4a659a2",
       "title": "Spring Festival",
       "description": "Celebrate the spring season with various campus activities.",

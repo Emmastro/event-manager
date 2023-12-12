@@ -5,11 +5,12 @@ const Event = require('../models/event');
 
 exports.createOrUpdateRsvp = async (req, res) => {
 
+    console.log("createOrUpdateRsvp");
     const eventId = req.params.id;
-
     const isAuthenticated = req.session.isAuthenticated;
 
     if (!isAuthenticated) {
+        console.log("not authenticated");
         return res.redirect("/auth/login?next=/events/create");
     }
     const event = await Event.findById({"_id":eventId});

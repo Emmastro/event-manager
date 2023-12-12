@@ -6,6 +6,8 @@ const RSVP = require("../models/rsvp");
 const mongoose = require("mongoose");
 
 exports.getEvents = async (req, res) => {
+
+  console.log("getEvents");
   const isAuthenticated = req.session.isAuthenticated;
   
   const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
@@ -36,9 +38,8 @@ exports.getEvents = async (req, res) => {
 exports.createOrUpdateEvent = async (req, res) => {
 
   console.log("createOrUpdateEvent");
-  // check if user is authenticated
   if (!req.session.isAuthenticated) {
-    console.log("not authenticated");
+
     return res.redirect("/auth/login?next=/events/create");
   }
 
@@ -53,6 +54,8 @@ exports.createOrUpdateEvent = async (req, res) => {
       const event = new Event(payload);
       await event.save();
       message = "Event created successfully";
+      // redirect to events page
+      return res.redirect("/events");
     } catch (error) {
       message = `Failed creating the event ${error.message} ${req.session.user}`;
     }
