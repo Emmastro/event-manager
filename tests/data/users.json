@@ -1,0 +1,34 @@
+[
+  {
+    "email": "john.doe@example.com",
+    "password": "encrypted_password_123",
+    "role": "alumni",
+    "firstName": "John",
+    "lastName": "Doe",
+    "graduationYear": 2022,
+    "major": "Computer Science",
+    "bio": "Passionate about technology and innovation.",
+    "profilePicture": "https://example.com/profiles/john.jpg"
+  },
+  {
+    "email": "jane.smith@example.com",
+    "password": "encrypted_password_456",
+    "role": "admin",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "graduationYear": 2020,
+    "major": "Business Administration",
+    "bio": "Enthusiastic business professional with a focus on leadership.",
+    "profilePicture": "https://example.com/profiles/jane.jpg"
+  },
+  {
+    "email": "alex.taylor@example.com",
+    "password": "encrypted_password_789",
+    "role": "alumni",
+    "firstName": "Alex",
+    "lastName": "Taylor",
+    "graduationYear": 2021,
+    "major": "Mechanical Engineering",
+    "profilePicture": "https://example.com/profiles/alex.jpg"
+  }
+]

@@ -5,14 +5,8 @@ const Event = require('../models/event');
 
 exports.createOrUpdateRsvp = async (req, res) => {
 
-    console.log("createOrUpdateRsvp");
     const eventId = req.params.id;
-    const isAuthenticated = req.session.isAuthenticated;
 
-    if (!isAuthenticated) {
-        console.log("not authenticated");
-        return res.redirect("/auth/login?next=/events/create");
-    }
     const event = await Event.findById({"_id":eventId});
     if (!event) return res.status(404).json({ message: "Event not found" });
 
@@ -24,8 +18,7 @@ exports.createOrUpdateRsvp = async (req, res) => {
             { rsvp: existingRsvp, event }
         );
         return res.render("partials/layout", {
-            body: content,
-            isAuthenticated: req.session.isAuthenticated,
+            body: content
         });
     }
 
@@ -47,7 +40,6 @@ exports.createOrUpdateRsvp = async (req, res) => {
         res.redirect(`/events/${eventId}`);
     }   
 }
-
 
 
 exports.updateRSVP = async (req, res) => {

@@ -5,11 +5,12 @@ const session = require('express-session');
 
 const SESSION_SECRET = require('./config/auth');
 
+const { addAuthVariablesToEJS } = require('./middleware/authMiddleware');
 const app = express();
 
 
 app.use(session({
-    secret: SESSION_SECRET,  // Choose a strong secret key
+    secret: process.env.SESSION_SECRET,  // Choose a strong secret key
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 3600000 }  // 1 hour
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV === 'test') {
       });
 }
 
+app.use(addAuthVariablesToEJS);
 
 app.set('view engine', 'ejs');
 
@@ -35,10 +37,12 @@ app.use(bodyParser.json());
 const mainRoutes = require('./routes/main');
 const authRoutes = require('./routes/auth');
 const eventRoutes = require('./routes/event');
+const userRoutes = require('./routes/users');
 
 app.use('/', mainRoutes);
 app.use('/auth', authRoutes);
 app.use('/events', eventRoutes);
+app.use('/users', userRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('404', { title: 'Page Not Found' });

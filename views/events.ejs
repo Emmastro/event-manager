@@ -1,13 +1,33 @@
-<section class="about-us-section py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Events</h2>
-    </div>
-</section>
-
 <section class="container my-5">
     <h2 class="animated fadeInLeft">Upcoming Events</h2>
     <div class="row">
-        <% events.forEach(event => { %> <%- include('partials/event-card', { event:
-        event }) %> <% }); %>
+        <% events.forEach(event => { %> <%- include('partials/event-card', { event: event }) %> <% }); %>
     </div>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Button -->
+            <li class="page-item <% if(page <= 1) { %>disabled<% } %>">
+                <a class="page-link" href="<%= page > 1 ? '/events?page=' + (page - 1) : '#' %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <% for(let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <% if(i === page) { %>active<% } %>">
+                    <a class="page-link" href="/events?page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+
+            <li class="page-item <%= page >= totalPages ? 'disabled' : '' %>">
+                <a class="page-link" href="<%= page < totalPages ? `/events?page=${page + 1}` : '#' %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
 </section>
+
+
+            

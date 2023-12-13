@@ -25,9 +25,15 @@
             <li id="logout-item">
                 <a class="nav-link" href="/auth/logout">Logout</a>
             </li>
+            <% if (isAdmin) { %>
             <li>
-                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/users">Users</a>
             </li>
+            <li>
+                <a class="nav-link" href="/users/create">Add User</a>
+            </li>
+            <% } %>
+
         <% } else { %>
             <li class="nav-item" id="login-item">
                 <a class="nav-link" href="/auth/login">Login</a>
@@ -36,6 +42,8 @@
                 <a class="nav-link" href="/auth/register">Register</a>
             </li>
         <% } %>
+
+
 
         </ul>
     </div>

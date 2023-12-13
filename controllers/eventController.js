@@ -6,52 +6,63 @@ const RSVP = require("../models/rsvp");
 const mongoose = require("mongoose");
 
 exports.getEvents = async (req, res) => {
-
-  console.log("getEvents");
   const isAuthenticated = req.session.isAuthenticated;
-  
   const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
-  const events = await Event.find(eventsQuery).limit(3);
+
+  const page = parseInt(req.query.page) || 1; // Current page number, default is 1
+  const limit = 6; // Number of events per page
+  const skip = (page - 1) * limit; // Number of events to skip
+
+  const totalEvents = await Event.countDocuments(eventsQuery);
+  const totalPages = Math.ceil(totalEvents / limit);
+  const events = await Event.find(eventsQuery).skip(skip).limit(limit);
 
   events.forEach((event) => {
-    if (isAuthenticated){
-        if (event.organizerId.toString() === req.session.user.id.toString()) {
-            event.isOrganizer = true;
-          }
-    }
-    else{
-        event.isOrganizer = false;
-    }
-    
+    event.isOrganizer =
+      isAuthenticated &&
+      event.organizerId.toString() === req.session.user.id.toString();
   });
+
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "events.ejs"),
-    { events }
+    { events, page, totalPages }
   );
 
   res.render("partials/layout", {
     body: content,
-    isAuthenticated: req.session.isAuthenticated,
   });
 };
 
 exports.createOrUpdateEvent = async (req, res) => {
 
-  console.log("createOrUpdateEvent");
-  if (!req.session.isAuthenticated) {
-
-    return res.redirect("/auth/login?next=/events/create");
-  }
-
-  console.log("authenticated");
+  let event = null;
   let message = null;
   if (req.method === "POST") {
     try {
+
+      // if the ID is present, then we are updating an existing event
+      if (req.body.id) {
+        event = await Event.findById(
+          new mongoose.Types.ObjectId(req.body.id)
+        );
+        if (!event) return res.status(404).json({ message: "Event not found" });
+        event.title = req.body.title;
+        event.description = req.body.description;
+        event.category = req.body.category;
+        event.date = req.body.date;
+        event.location = req.body.location;
+        event.image = req.body.image;
+        event.visibility = req.body.visibility;
+        await event.save();
+        message = "Event updated successfully";
+        return res.redirect(`/events/${event._id}`);
+      }
+
       const payload = req.body;
       console.log("payload: ", payload);
       payload.organizerId = req.session.user.id;
 
-      const event = new Event(payload);
+      event = new Event(payload);
       await event.save();
       message = "Event created successfully";
       // redirect to events page
@@ -60,30 +71,35 @@ exports.createOrUpdateEvent = async (req, res) => {
       message = `Failed creating the event ${error.message} ${req.session.user}`;
     }
   }
+  else if (req.method === "GET") {
+    // load the event, and display it on the form for editing
+
+    event = await Event.findById(
+      new mongoose.Types.ObjectId(req.params.id)
+    );
+
+  }
+
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "events-create.ejs"),
-    { message }
+    { message, event }
   );
+
   res.render("partials/layout", {
-    body: content,
-    isAuthenticated: req.session.isAuthenticated,
+    body: content
   });
 };
 
 exports.getEvent = async (req, res) => {
-
-    console.log("event Id: ",req.params.id)
-  const event = await Event.findById(new mongoose.Types.ObjectId(req.params.id));
+  console.log("event Id: ", req.params.id);
+  const event = await Event.findById(
+    new mongoose.Types.ObjectId(req.params.id)
+  );
   if (!event) return res.status(404).json({ message: "Event not found" });
 
   let isOrganizer = false;
   let participants = null;
 
-  const isAuthenticated = req.session.isAuthenticated;
-
-  if (!isAuthenticated) {
-    return res.redirect("/auth/login?next=/events/create");
-  }
   if (event.organizerId.toString() === req.session?.user?.id.toString()) {
     isOrganizer = true;
   }
@@ -125,7 +141,6 @@ exports.getEvent = async (req, res) => {
 
   res.render("partials/layout", {
     body: content,
-    isAuthenticated: req.session.isAuthenticated,
   });
 };
 
@@ -134,7 +149,7 @@ exports.deleteEvent = async (req, res) => {
     const { id } = req.params;
     const deleted = await Event.findByIdAndDelete(id);
     if (deleted) {
-      return res.status(200).send("Event deleted");
+      return res.redirect("/events");
     }
     throw new Error("Event not found");
   } catch (error) {

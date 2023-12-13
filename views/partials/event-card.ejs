@@ -16,7 +16,7 @@
             <div class="btn-group">
                 <a href="/events/<%= event._id %>" class="btn btn-info">Details</a>
                 <% if (event.isOrganizer) { %>
-                <a href="/events/<%= event._id %>/edit" class="btn btn-info">Edit</a>
+                <a href="/events/<%= event._id %>/update" class="btn btn-info">Edit</a>
                 <form class="btn-group" action="/events/<%= event._id %>/delete" method="POST">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>

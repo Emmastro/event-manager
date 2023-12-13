@@ -1,65 +1,59 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Create a New Event</h2>
+    <h2 class="text-center mb-4"><%= event ? 'Edit Event' : 'Create a New Event' %></h2>
     
-    <form action="/events/create" method="POST">
+    <form action="<%= event ? '/events/' + event._id + '/update' : '/events/create' %>" method="POST">
         <p><%= message %></p>
-        <!-- Title -->
+        
+        <!-- Event Title -->
         <div class="mb-3">
             <label for="title" class="form-label">Event Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
+            <input type="text" class="form-control" id="title" name="title" value="<%= event ? event.title : '' %>" required>
         </div>
 
-        <!-- Description -->
+        <!-- Event Description -->
         <div class="mb-3">
             <label for="description" class="form-label">Event Description</label>
-            <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            <textarea class="form-control" id="description" name="description" rows="4" required><%= event ? event.description : '' %></textarea>
         </div>
 
-        <!-- Category -->
+        <!-- Event Category -->
         <div class="mb-3">
             <label for="category" class="form-label">Event Category</label>
             <select class="form-select" id="category" name="category" required>
-                <option value="professional development">Professional Development</option>
-                <option value="networking">Networking</option>
-                <option value="campus events">Campus Events</option>
+                <% ['professional development', 'networking', 'campus events'].forEach(function(category) { %>
+                    <option value="<%= category %>" <%= event && event.category === category ? 'selected' : '' %>><%= category %></option>
+                <% }); %>
             </select>
         </div>
 
-        <!-- Date -->
+        <!-- Event Date -->
         <div class="mb-3">
             <label for="date" class="form-label">Event Date</label>
-            <input type="date" class="form-control" id="date" name="date" required>
+            <input type="date" class="form-control" id="date" name="date" value="<%= event ? event.date.toISOString().split('T')[0] : '' %>" required>
         </div>
 
-        <!-- Location -->
+        <!-- Event Location -->
         <div class="mb-3">
             <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" name="location" required>
+            <input type="text" class="form-control" id="location" name="location" value="<%= event ? event.location : '' %>" required>
         </div>
 
-        <!-- Image -->
-        <!-- <div class="mb-3">
-            <label for="image" class="form-label">Event Image</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/*">
-            <small class="form-text text-muted">Upload a representative image for the event.</small>
-        </div> -->
-
-        <!-- Visibility -->
+        <!-- Event Visibility -->
         <div class="mb-3">
             <label class="form-label">Event Visibility</label><br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="visibility" id="public" value="public" required>
+                <input class="form-check-input" type="radio" name="visibility" id="public" value="public" <%= !event || event.visibility === 'public' ? 'checked' : '' %> required>
                 <label class="form-check-label" for="public">Public</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="visibility" id="private" value="private">
+                <input class="form-check-input" type="radio" name="visibility" id="private" value="private" <%= event && event.visibility === 'private' ? 'checked' : '' %>>
                 <label class="form-check-label" for="private">Private</label>
             </div>
         </div>
 
         <!-- Submit Button -->
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Create Event</button>
+            <button type="submit" class="btn btn-primary"><%= event ? 'Update Event' : 'Create Event' %></button>
         </div>
     </form>
 </div>

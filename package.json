@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Emmastro/event-manager#readme",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
