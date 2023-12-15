@@ -1,5 +1,6 @@
 [
   {
+    "_id": "627b72eaf76a5b23e4a657e6",
     "email": "john.doe@example.com",
     "password": "encrypted_password_123",
     "role": "alumni",
@@ -11,6 +12,7 @@
     "profilePicture": "https://example.com/profiles/john.jpg"
   },
   {
+    "_id": "627b72eaf76a5b23e4a658f7",
     "email": "jane.smith@example.com",
     "password": "encrypted_password_456",
     "role": "admin",

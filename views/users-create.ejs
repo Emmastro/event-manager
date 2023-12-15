@@ -1,54 +1,54 @@
 <div class="container mt-5">
-    <h2 class="text-center mb-4">User Registration</h2>
+    <h2 class="text-center mb-4"><%= title%></h2>
     
     <form action="" method="POST">
         <p><%= message %></p>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <input type="email" class="form-control" id="email" name="email" value="<%= user ? user.email : '' %>" required>
         </div>
 
         <div class="mb-3">
             <label for="role" class="form-label">Role</label>
             <select class="form-select" id="role" name="role">
-                <option value="alumni">Alumni</option>
-                <option value="admin">Admin</option>
+                <option value="alumni" <%= user && user.role === 'alumni' ? 'selected' : '' %>>Alumni</option>
+                <option value="admin" <%= user && user.role === 'admin' ? 'selected' : '' %>>Admin</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" required>
+            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user ? user.firstName : '' %>" required>
         </div>
 
         <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" required>
+            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user ? user.lastName : '' %>" required>
         </div>
 
         <div class="mb-3">
             <label for="graduationYear" class="form-label">Graduation Year</label>
-            <input type="number" class="form-control" id="graduationYear" name="graduationYear" required>
+            <input type="number" class="form-control" id="graduationYear" name="graduationYear" value="<%= user ? user.graduationYear : '' %>" required>
         </div>
 
         <div class="mb-3">
             <label for="major" class="form-label">Major</label>
-            <input type="text" class="form-control" id="major" name="major" required>
+            <input type="text" class="form-control" id="major" name="major" value="<%= user ? user.major : '' %>" required>
         </div>
 
         <div class="mb-3">
             <label for="bio" class="form-label">Bio</label>
-            <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
+            <textarea class="form-control" id="bio" name="bio" rows="3"><%= user ? user.bio : '' %></textarea>
         </div>
 
         <div class="mb-3">
             <label for="profilePicture" class="form-label">Profile Picture URL</label>
-            <input type="text" class="form-control" id="profilePicture" name="profilePicture">
+            <input type="text" class="form-control" id="profilePicture" name="profilePicture" value="<%= user ? user.profilePicture : '' %>">
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary"><%=button%></button>
         </div>
     </form>
 </div>

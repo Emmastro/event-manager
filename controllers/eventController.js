@@ -4,13 +4,14 @@ const path = require("path");
 const Event = require("../models/event");
 const RSVP = require("../models/rsvp");
 const mongoose = require("mongoose");
+const { render404 } = require("../utils/custom_responses");
 
 exports.getEvents = async (req, res) => {
   const isAuthenticated = req.session.isAuthenticated;
   const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
 
   const page = parseInt(req.query.page) || 1; // Current page number, default is 1
-  const limit = 6; // Number of events per page
+  const limit = 10; // Number of events per page
   const skip = (page - 1) * limit; // Number of events to skip
 
   const totalEvents = await Event.countDocuments(eventsQuery);
@@ -37,29 +38,22 @@ exports.createOrUpdateEvent = async (req, res) => {
 
   let event = null;
   let message = null;
+
+  //if the ID is present, then we are updating an existing event
+  if (req.params.id) {
+    event = await Event.findById(new mongoose.Types.ObjectId(req.params.id));
+
+    if (!event) return render404(res, 'Event not found');
+
+    event = Object.assign(event, req.body);
+
+    await event.save();
+    return res.redirect(`/events`);
+  }
+
   if (req.method === "POST") {
     try {
-
-      // if the ID is present, then we are updating an existing event
-      if (req.body.id) {
-        event = await Event.findById(
-          new mongoose.Types.ObjectId(req.body.id)
-        );
-        if (!event) return res.status(404).json({ message: "Event not found" });
-        event.title = req.body.title;
-        event.description = req.body.description;
-        event.category = req.body.category;
-        event.date = req.body.date;
-        event.location = req.body.location;
-        event.image = req.body.image;
-        event.visibility = req.body.visibility;
-        await event.save();
-        message = "Event updated successfully";
-        return res.redirect(`/events/${event._id}`);
-      }
-
       const payload = req.body;
-      console.log("payload: ", payload);
       payload.organizerId = req.session.user.id;
 
       event = new Event(payload);
@@ -69,15 +63,12 @@ exports.createOrUpdateEvent = async (req, res) => {
       return res.redirect("/events");
     } catch (error) {
       message = `Failed creating the event ${error.message} ${req.session.user}`;
+      console.log("error: ", error);
     }
-  }
-  else if (req.method === "GET") {
+  } else if (req.method === "GET") {
     // load the event, and display it on the form for editing
 
-    event = await Event.findById(
-      new mongoose.Types.ObjectId(req.params.id)
-    );
-
+    event = await Event.findById(new mongoose.Types.ObjectId(req.params.id));
   }
 
   const content = await ejs.renderFile(
@@ -86,16 +77,15 @@ exports.createOrUpdateEvent = async (req, res) => {
   );
 
   res.render("partials/layout", {
-    body: content
+    body: content,
   });
 };
 
 exports.getEvent = async (req, res) => {
-  console.log("event Id: ", req.params.id);
   const event = await Event.findById(
     new mongoose.Types.ObjectId(req.params.id)
   );
-  if (!event) return res.status(404).json({ message: "Event not found" });
+  if (!event) return render404(res, 'Event not found');;
 
   let isOrganizer = false;
   let participants = null;
@@ -104,7 +94,7 @@ exports.getEvent = async (req, res) => {
     isOrganizer = true;
   }
 
-  if (isOrganizer || req.session.user.role === "admin") {
+  if (isOrganizer || req.session.user?.role === "admin") {
     participants = await RSVP.aggregate([
       {
         $match: {
@@ -151,7 +141,8 @@ exports.deleteEvent = async (req, res) => {
     if (deleted) {
       return res.redirect("/events");
     }
-    throw new Error("Event not found");
+
+    return render404(res, 'Event not found');;
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

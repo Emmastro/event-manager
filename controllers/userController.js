@@ -3,48 +3,51 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const ejs = require("ejs");
 const send_email = require("../utils/email");
+const mongoose = require("mongoose");
+const { render404 } = require("../utils/custom_responses");
+const { render } = require("../app");
 
 const SALT_ROUNDS = 10;
 
 exports.login = async (req, res) => {
   let message = null;
 
-  const isAuthenticated = req.session.isAuthenticated;
-  if (isAuthenticated) {
-    res.redirect("/events");
-    return;
-  }
-
   if (req.method === "POST") {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
-
       if (!user) {
         message = `Login failed! Check authentication credentials ${email}`;
+      } else {
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+          message = "Invalid credentials.";
+        }
+
+        req.session.user = {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+        };
+
+        console.log("session set: ", req.session.user);
+
+        req.session.isAuthenticated = true;
+        const redirectUrl =
+          req.session.originalUrl || req.query.next || "/events";
+
+        delete req.session.originalUrl;
+        return res.redirect(redirectUrl);
       }
-
-      const passwordMatch = await bcrypt.compare(password, user.password);
-
-      if (!passwordMatch) {
-        message = "Invalid credentials.";
-      }
-
-      req.session.user = {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      };
-
-      req.session.isAuthenticated = true;
-      const redirectUrl =
-        req.session.originalUrl || req.query.next || "/events";
-
-      delete req.session.originalUrl;
-      res.redirect(redirectUrl);
-      return;
     } catch (error) {
       message = `Error during login: ${error}`;
+    }
+  } else {
+    const isAuthenticated = req.session.isAuthenticated;
+    if (isAuthenticated) {
+      res.redirect("/events");
+      return;
     }
   }
 
@@ -84,16 +87,35 @@ exports.register = async (req, res) => {
 };
 
 exports.createOrUpdateUser = async (req, res) => {
+
   let message = null;
+  let user = null;
+  let title = "User Registration";
+  let button = "Register";
+  //if the ID is present, then we are updating an existing user
+  if (req.params.id) {
+    user = await User.findById(new mongoose.Types.ObjectId(req.params.id));
+
+    if (!user) return render404(res, 'User not found');
+
+    if (req.method === "POST"){
+      user = Object.assign(user, req.body);
+      await user.save();
+    }
+
+    title = "Update User";
+    button = "Update";
+
+  }
+
   if (req.method === "POST") {
     try {
       const payload = req.body;
 
-      const user = new User(payload);
+      user = new User(payload);
       // generate a random password
       const password = Math.random().toString(36).slice(-8);
       user.password = await bcrypt.hash(password, SALT_ROUNDS);
-      // send email to user with password
 
       send_email(user.email, "Your password", `Your password is ${password}`);
       await user.save();
@@ -103,7 +125,7 @@ exports.createOrUpdateUser = async (req, res) => {
   }
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "users-create.ejs"),
-    { message }
+    { message, user, title, button }
   );
 
   res.render("partials/layout", {
@@ -128,7 +150,7 @@ exports.registerPage = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return render404(res, "Event not found");
     res.json({ user });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -196,9 +218,9 @@ exports.deleteUser = async (req, res) => {
     const { id } = req.params;
     const deleted = await User.findByIdAndDelete(id);
     if (deleted) {
-      return res.status(200).send("User deleted");
+      return res.redirect("/users");
     }
-    throw new Error("User not found");
+    render404(res, "User not found");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -209,12 +231,10 @@ exports.logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error during logout:", err);
-      res
-        .status(500)
-        .send({
-          success: false,
-          message: "Internal server error during logout.",
-        });
+      res.status(500).send({
+        success: false,
+        message: "Internal server error during logout.",
+      });
       return;
     }
     res.redirect("/"); // redirect to homepage or login page after logout

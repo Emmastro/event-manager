@@ -24,15 +24,15 @@
                             <td><%= user.graduationYear %></td>
                             <td><%= user.major %></td>
                             <td>
-                                <button class="btn btn-primary btn-sm">Edit</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
+                                <a href="/users/<%= user._id %>/update"><button class="btn btn-primary btn-sm">Edit</button></a>
+                                <a href="/users/<%= user._id %>/delete"><button class="btn btn-danger btn-sm">Delete</button></a>
                             </td>
                         </tr>
                     <% }); %>
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-success">Add New Alumni</button>
+        <a href="/users/create"><button class="btn btn-success">Add New Alumni</button></a>
     </div>
     <!-- Bootstrap JavaScript and other necessary scripts -->
 </body>

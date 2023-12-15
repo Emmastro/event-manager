@@ -40,7 +40,7 @@ const eventRoutes = require('./routes/event');
 const userRoutes = require('./routes/users');
 
 app.use('/', mainRoutes);
-app.use('/auth', authRoutes);
+app.use('/authenticate', authRoutes);
 app.use('/events', eventRoutes);
 app.use('/users', userRoutes);
 

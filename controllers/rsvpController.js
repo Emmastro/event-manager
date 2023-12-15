@@ -2,13 +2,14 @@ const ejs = require('ejs');
 const path = require('path');
 const RSVP = require('../models/rsvp');
 const Event = require('../models/event');
+const { render404 } = require('../utils/custom_responses');
 
 exports.createOrUpdateRsvp = async (req, res) => {
 
     const eventId = req.params.id;
 
     const event = await Event.findById({"_id":eventId});
-    if (!event) return res.status(404).json({ message: "Event not found" });
+    if (!event) return render404(res, 'Event not found');
 
     if (req.method === "GET") {
         const existingRsvp = await RSVP.findOne({ userId: req.session.user.id, eventId: eventId });
@@ -40,7 +41,6 @@ exports.createOrUpdateRsvp = async (req, res) => {
         res.redirect(`/events/${eventId}`);
     }   
 }
-
 
 exports.updateRSVP = async (req, res) => {
     try{

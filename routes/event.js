@@ -12,7 +12,7 @@ router.get('/', eventController.getEvents);
 router.get('/create', isAuthenticated, eventController.createOrUpdateEvent);
 router.post('/create', isAuthenticated, eventController.createOrUpdateEvent);
 
-router.post('/:id/delete', isAuthenticated, eventController.deleteEvent);
+router.post('/:id([a-fA-F0-9]{24})/delete', isAuthenticated, eventController.deleteEvent);
 
 router.get('/:id([a-fA-F0-9]{24})', eventController.getEvent);
 router.post('/:id([a-fA-F0-9]{24})/update', isAuthenticated, eventController.createOrUpdateEvent);

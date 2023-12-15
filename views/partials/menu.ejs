@@ -23,23 +23,20 @@
             <li class="nav-item" id="login-item">
                 <a class="nav-link" href="/events/create">Add Event</a>
             <li id="logout-item">
-                <a class="nav-link" href="/auth/logout">Logout</a>
+                <a class="nav-link" href="/authenticate/logout">Logout</a>
             </li>
             <% if (isAdmin) { %>
             <li>
                 <a class="nav-link" href="/users">Users</a>
             </li>
-            <li>
-                <a class="nav-link" href="/users/create">Add User</a>
-            </li>
             <% } %>
 
         <% } else { %>
             <li class="nav-item" id="login-item">
-                <a class="nav-link" href="/auth/login">Login</a>
+                <a class="nav-link" href="/authenticate/login">Login</a>
             </li>
             <li id="register-item">
-                <a class="nav-link" href="/auth/register">Register</a>
+                <a class="nav-link" href="/authenticate/register">Register</a>
             </li>
         <% } %>
 
