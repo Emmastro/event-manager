@@ -1,7 +1,5 @@
 const request = require("supertest");
 const app = require("../app");
-const users = require("./data/users.json");
-const session = require('express-session');
 let server;
 
 beforeAll((done) => {

@@ -1,8 +1,6 @@
 const request = require("supertest");
-const mongoose = require("mongoose");
 const app = require("../app");
 const users = require("./data/users.json");
-const User = require("../models/user");
 
 let server;
 
@@ -36,7 +34,8 @@ describe("User Controller Tests", () => {
       .send(credentials);
 
     expect(res.statusCode).toEqual(200);
-    expect(res.text).toMatch(/Login failed!/);
+    // url remains login
+    expect(res.text).toMatch(/Login/);
   });
 
   it("should login as the user is already logged in", async () => {

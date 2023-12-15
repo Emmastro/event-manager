@@ -45,10 +45,13 @@ exports.createOrUpdateEvent = async (req, res) => {
 
     if (!event) return render404(res, 'Event not found');
 
-    event = Object.assign(event, req.body);
+    if (req.method === "POST") {
 
-    await event.save();
-    return res.redirect(`/events`);
+      event = Object.assign(event, req.body);
+
+      await event.save();
+      return res.redirect(`/events`);
+    }
   }
 
   if (req.method === "POST") {
@@ -65,12 +68,7 @@ exports.createOrUpdateEvent = async (req, res) => {
       message = `Failed creating the event ${error.message} ${req.session.user}`;
       console.log("error: ", error);
     }
-  } else if (req.method === "GET") {
-    // load the event, and display it on the form for editing
-
-    event = await Event.findById(new mongoose.Types.ObjectId(req.params.id));
-  }
-
+  } 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "events-create.ejs"),
     { message, event }

@@ -12,17 +12,27 @@ const SALT_ROUNDS = 10;
 exports.login = async (req, res) => {
   let message = null;
 
+  const renderLogin = async (message) => {
+    const content = await ejs.renderFile(
+      path.join(__dirname, "..", "views", "login.ejs"),
+      { message }
+    );
+    res.render("partials/layout", { body: content });
+  };
+
   if (req.method === "POST") {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
       if (!user) {
         message = `Login failed! Check authentication credentials ${email}`;
+        return await renderLogin(message);
       } else {
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
           message = "Invalid credentials.";
+          return await renderLogin(message);
         }
 
         req.session.user = {
@@ -42,21 +52,16 @@ exports.login = async (req, res) => {
       }
     } catch (error) {
       message = `Error during login: ${error}`;
+      return await renderLogin(message);
     }
   } else {
     const isAuthenticated = req.session.isAuthenticated;
     if (isAuthenticated) {
-      res.redirect("/events");
-      return;
+      return res.redirect("/events");
     }
   }
 
-  const content = await ejs.renderFile(
-    path.join(__dirname, "..", "views", "login.ejs"),
-    { message }
-  );
-
-  res.render("partials/layout", { body: content });
+  await renderLogin(message);
 };
 
 exports.register = async (req, res) => {
