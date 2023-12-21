@@ -11,7 +11,7 @@ exports.homePage = async (req, res) => {
     const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
     const events = await Event.find(eventsQuery).limit(3);
 
-    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'index.ejs'), { events, user,  });
+    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'index.ejs'), {...res.locals,  events, user,  });
 
     res.render('partials/layout', { body: content});
 }
@@ -22,11 +22,11 @@ exports.contactPage = async(req, res) => {
         const { name, email, message } = req.body;
         send_email(email, `Contact from ${name}`, message);
     }
-    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'contact-us.ejs'));
+    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'contact-us.ejs'), {...res.locals});
     res.render('partials/layout', { body: content });
 }
 
 exports.aboutPage = async(req, res) => {
-    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'about-us.ejs'));
+    const content = await ejs.renderFile(path.join(__dirname, '..', 'views', 'about-us.ejs'), {...res.locals});
     res.render('partials/layout', { body: content });
 }

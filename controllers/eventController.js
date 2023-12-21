@@ -8,6 +8,8 @@ const { render404 } = require("../utils/custom_responses");
 
 exports.getEvents = async (req, res) => {
   const isAuthenticated = req.session.isAuthenticated;
+
+  console.log("req.locals", req.locals, res.locals);
   const eventsQuery = isAuthenticated ? {} : { visibility: "public" };
 
   const page = parseInt(req.query.page) || 1; // Current page number, default is 1
@@ -26,7 +28,7 @@ exports.getEvents = async (req, res) => {
 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "events.ejs"),
-    { events, page, totalPages }
+    { ...res.locals, events, page, totalPages }
   );
 
   res.render("partials/layout", {
@@ -71,7 +73,7 @@ exports.createOrUpdateEvent = async (req, res) => {
   } 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "events-create.ejs"),
-    { message, event }
+    { ...res.locals, message, event }
   );
 
   res.render("partials/layout", {
@@ -124,7 +126,7 @@ exports.getEvent = async (req, res) => {
 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "event.ejs"),
-    { event, participants, isOrganizer }
+    { ...res.locals, event, participants, isOrganizer }
   );
 
   res.render("partials/layout", {

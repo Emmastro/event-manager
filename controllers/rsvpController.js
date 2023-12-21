@@ -16,7 +16,7 @@ exports.createOrUpdateRsvp = async (req, res) => {
 
         const content = await ejs.renderFile(
             path.join(__dirname, "..", "views", "event-rsvp.ejs"),
-            { rsvp: existingRsvp, event }
+            { rsvp: existingRsvp, event, ...res.locals }
         );
         return res.render("partials/layout", {
             body: content

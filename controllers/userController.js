@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
   const renderLogin = async (message) => {
     const content = await ejs.renderFile(
       path.join(__dirname, "..", "views", "login.ejs"),
-      { message }
+      { message, ...res.locals }
     );
     res.render("partials/layout", { body: content });
   };
@@ -130,7 +130,7 @@ exports.createOrUpdateUser = async (req, res) => {
   }
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "users-create.ejs"),
-    { message, user, title, button }
+    { message, user, title, button, ...res.locals }
   );
 
   res.render("partials/layout", {
@@ -146,7 +146,7 @@ exports.registerPage = async (req, res) => {
 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "register.ejs"),
-    { years }
+    { years, ...res.locals }
   );
 
   res.render("partials/layout", { body: content });
@@ -173,7 +173,7 @@ exports.getUsers = async (req, res) => {
 
   const content = await ejs.renderFile(
     path.join(__dirname, "..", "views", "users.ejs"),
-    { users, page, totalPages }
+    { users, page, totalPages, ...res.locals }
   );
 
   res.render("partials/layout", {
