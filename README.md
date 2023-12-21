@@ -50,10 +50,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Running the Tests
 
-To run automated tests for this ssystem
+To run automated tests for this system
 
     ```sh
-    npm run test
+    npm test
     ```
 ### Deployment
 
@@ -73,5 +73,5 @@ To run automated tests for this ssystem
 
 ### Authors
 
-* **[Emmanuel Murair](https://github.com/Emmastro)
+* [Emmanuel Murairi](https://github.com/Emmastro)
 
